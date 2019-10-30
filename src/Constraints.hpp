@@ -1,0 +1,1 @@
+#define MAXPEOPLE 1003
