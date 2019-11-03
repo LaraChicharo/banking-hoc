@@ -5,11 +5,11 @@ using namespace std;
 
 
 Reader::Reader(int argc, char* argv[]): argc(argc) {
+    all_balances.resize(MAXPEOPLE);
     BuildInput(argc, argv);
     CheckInput();
     ParseInput();
     OpenFile();
-    BuildNegativesPositives();
 }
 
 
@@ -44,9 +44,9 @@ void Reader::OpenFile() {
     }
     
     string line;
-    size = 0;
+    npeople = 0;
     while (getline(filestream, line)) {
-        size++;
+        npeople++;
 
         for (int i=0; i<(int)line.size(); i++) {
             if (line[i] == ':' || line[i] == ',')
@@ -72,20 +72,10 @@ void Reader::OpenFile() {
     }
 }
 
-void Reader::BuildNegativesPositives() {
-    for (int i=0; i<size; i++) {
-        if (all_balances[i] < 0) {
-            negatives.push_back(all_balances[i]);
-        } else if (all_balances > 0) {
-            positives.push_back(all_balances[i]);
-        }
-    }
+vector<long long> Reader::GetAllBalances() {
+    return all_balances;
 }
 
-vector<long long> Reader::GetNegatives() {
-    return negatives;
-}
-
-vector<long long> Reader::GetPositives() {
-    return positives;
+int Reader::GetNPeople() {
+    return npeople;
 }

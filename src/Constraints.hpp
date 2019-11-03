@@ -1,1 +1,3 @@
-#define MAXPEOPLE 1003
+#pragma once
+
+const int MAXPEOPLE = 1003;
