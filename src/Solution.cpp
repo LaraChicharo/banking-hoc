@@ -25,7 +25,15 @@ vector<int> Solution::GetCreditors() {
     return creditors;
 }
 
-void Solution::transaction(int i, long long amount) {
+void Solution::MakeTransaction(int i, long long amount) {
     all_balances[i] += amount;
+}
+
+long long Solution::GetBalance(int i) {
+    return all_balances[i];
+}
+
+int Solution::GetNPeople() {
+    return npeople;
 }
 

@@ -29,5 +29,7 @@ class Solution {
         std::vector<int> GetDebtors();
         std::vector<int> GetCreditors();
 
-        void transaction(int i, long long amount);
+        void MakeTransaction(int i, long long amount);
+        long long GetBalance(int id);
+        int GetNPeople();
 };
