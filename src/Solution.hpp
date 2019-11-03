@@ -16,9 +16,9 @@ typedef struct Transaction Transaction;
 
 class Solution {
     private:
+        int npeople;
         std::vector<Transaction> transactions;
         std::vector<long long> all_balances;
-        int npeople;
 
         std::vector<int> debtors;
         std::vector<int> creditors;
