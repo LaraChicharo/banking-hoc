@@ -7,12 +7,12 @@
 
 class BipFullGraph {
     private:
-        const long long MAXERROR = 1e18;
-        int ghostid;
-        int npeople;
+        const double MAXERROR = 1e9;
+        int nside;
+        int debtors_size;
+        int creditors_size;
         Solution* solution;
 
-        std::vector<std::vector<long long>> edges;
         std::vector<int> debtors;
         std::vector<int> creditors;
 
@@ -23,8 +23,9 @@ class BipFullGraph {
         void SetEdges(); 
 
     public:
+        std::vector<std::vector<double>> edges;
+
         BipFullGraph(Solution* solution);
-        long long Get(int debtorid, int creditorid);
 };
 
 

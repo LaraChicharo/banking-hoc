@@ -4,28 +4,28 @@ using namespace std;
 
 
 BipFullGraph::BipFullGraph(Solution* solution): solution(solution) {
-    npeople = solution->GetNPeople();
-    ghostid = npeople;
+    debtors_size = solution->GetDebtors().size();
+    creditors_size = solution->GetCreditors().size();
+    nside = max(debtors_size, creditors_size);
     SetVertices(solution->GetDebtors(), solution->GetCreditors());
+    nside = debtors.size(); 
     SetEdges();
 }
 
 void BipFullGraph::SetEdges() {
-    edges.resize(npeople + 1);
-    for (int i=0; i<npeople + 1; i++) {
-        edges[i].resize(npeople + 1);
+    edges.resize(nside);
+    for (int i=0; i < nside; i++) {
+        edges[i].resize(nside);
     }
-    for (int debtorid : debtors) {
-        long long debtr_balance = 0;
-        if (debtorid != ghostid)
-            debtr_balance = solution->GetBalance(debtorid);
-        for (int creditorid : creditors) {
-            if (creditorid != ghostid && debtorid != ghostid) {
-                long long credr_balance = solution->GetBalance(creditorid);
-                long long ind_error = abs(credr_balance - debtr_balance);
-                edges[debtorid][creditorid] = MAXERROR - ind_error;
+    for (int i=0; i < nside; i++) {
+        for (int j=0; j < nside; j++) {
+            if (i >= debtors_size || j >= creditors_size) {
+                edges[i][j] = MAXERROR;
             } else {
-                edges[debtorid][creditorid] = 0;
+                double credr_balance = solution->GetBalance(creditors[j]); 
+                double debtr_balance = solution->GetBalance(debtors[i]); 
+                double error = abs(credr_balance - debtr_balance);
+                edges[i][j] = error;
             }
         }
     }
@@ -34,22 +34,8 @@ void BipFullGraph::SetEdges() {
 void BipFullGraph::SetVertices(
     vector<int> debtors, vector<int> creditors
 ) {
-    int sized = debtors.size();
-    int sizec = creditors.size();
-
-    if (sized > sizec) {
-        for (int i=0; i< sized - sizec; i++)
-            creditors.push_back(ghostid);
-    } else {
-        for (int i=0; i< sizec - sized; i++)
-            debtors.push_back(ghostid); 
-    }
     this->debtors = debtors;
     this->creditors = creditors;
-}
-
-long long BipFullGraph::Get(int debtorid, int creditorid) {
-    return edges[debtorid][creditorid];
 }
 
 
