@@ -8,7 +8,7 @@
 
 class BipFullGraph {
     private:
-        const double MAXERROR = 1e5;
+        const double MAXERROR = 1e4;
         int nside;
         int debtors_size;
         int creditors_size;
@@ -27,6 +27,7 @@ class BipFullGraph {
         std::vector<std::vector<double>> edges;
 
         BipFullGraph(Solution* solution);
+        void BuildGraph();
 };
 
 
@@ -39,6 +40,7 @@ class BipartiteMatching {
     public:
         BipartiteMatching(Solution* solution);
         double Solve();
+        void RebuildGraph();
 
 };
 

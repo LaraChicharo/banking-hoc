@@ -17,6 +17,7 @@ typedef struct Transaction Transaction;
 class Solution {
     private:
         int npeople;
+        double error;
         std::vector<Transaction> transactions;
         std::vector<long long> all_balances;
 
@@ -31,9 +32,17 @@ class Solution {
         std::vector<int> GetDebtors();
         std::vector<int> GetCreditors();
 
+        int GetDebtorAt(int i);
+        int GetCreditorAt(int i);
+
+        int GetCreditorsSize();
+        int GetDebtorsSize();
+
         void Pay(int debtor, int creditor, long long amount);
         long long GetBalance(int id);
         int GetNPeople();
         void RestartTypes();
         std::vector<Transaction> GetTransactions();
+        void SetError(double error);
+        double GetError();
 };

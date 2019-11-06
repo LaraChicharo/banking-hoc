@@ -4,8 +4,12 @@ using namespace std;
 
 
 BipFullGraph::BipFullGraph(Solution* solution): solution(solution) {
-    debtors_size = solution->GetDebtors().size();
-    creditors_size = solution->GetCreditors().size();
+    BuildGraph();
+}
+
+void BipFullGraph::BuildGraph() {
+    debtors_size = solution->GetDebtorsSize();
+    creditors_size = solution->GetCreditorsSize();
     nside = max(debtors_size, creditors_size);
     SetVertices(solution->GetDebtors(), solution->GetCreditors());
     SetEdges();
@@ -39,8 +43,8 @@ void BipFullGraph::SetVertices(
 
 
 BipartiteMatching::BipartiteMatching(
-    Solution* solution): solution(solution
-) {
+    Solution* solution): solution(solution)
+{
     graph = new BipFullGraph(solution);
 }
 
@@ -49,10 +53,20 @@ double BipartiteMatching::Solve() {
     vector<int> pairings;
     double error = ha.Solve(graph->edges, pairings);
     for (int i=0; i<(int)pairings.size(); i++) {
-        int debtor = solution->GetDebtors()[i];
-        int creditor = solution->GetCreditors()[pairings[i]];
+        if (
+            i >= solution->GetDebtorsSize() ||
+            pairings[i] >= solution->GetCreditorsSize()
+        )
+            continue;
+        int debtor = solution->GetDebtorAt(i);
+        int creditor = solution->GetCreditorAt(pairings[i]);
         long long amount = abs(solution->GetBalance(debtor));
         solution->Pay(debtor, creditor, amount);
     }
     return error;
+}
+
+void BipartiteMatching::RebuildGraph() {
+    solution->RestartTypes();
+    graph->BuildGraph();
 }
