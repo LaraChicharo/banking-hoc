@@ -4,10 +4,11 @@
 #include <cmath>
 
 #include "Solution.hpp"
+#include "hungarian-algorithm-cpp/Hungarian.h"
 
 class BipFullGraph {
     private:
-        const double MAXERROR = 1e9;
+        const double MAXERROR = 1e5;
         int nside;
         int debtors_size;
         int creditors_size;
@@ -37,6 +38,7 @@ class BipartiteMatching {
 
     public:
         BipartiteMatching(Solution* solution);
+        double Solve();
 
 };
 

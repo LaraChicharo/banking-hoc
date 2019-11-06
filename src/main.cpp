@@ -1,5 +1,7 @@
 #include <vector>
 
+#include <cstdio>
+
 #include "Reader.hpp"
 #include "Solution.hpp"
 #include "BipartiteMatching.hpp"
@@ -12,4 +14,6 @@ int main(int argc, char* argv[]) {
     vector<long long> all_balances = reader->GetAllBalances();
     Solution* solution = new Solution(npeople, all_balances);
     BipartiteMatching* bpm = new BipartiteMatching(solution);
+    double error = bpm->Solve();
+    printf(" error: %f\n", error);
 }

@@ -8,7 +8,6 @@ BipFullGraph::BipFullGraph(Solution* solution): solution(solution) {
     creditors_size = solution->GetCreditors().size();
     nside = max(debtors_size, creditors_size);
     SetVertices(solution->GetDebtors(), solution->GetCreditors());
-    nside = debtors.size(); 
     SetEdges();
 }
 
@@ -24,8 +23,8 @@ void BipFullGraph::SetEdges() {
             } else {
                 double credr_balance = solution->GetBalance(creditors[j]); 
                 double debtr_balance = solution->GetBalance(debtors[i]); 
-                double error = abs(credr_balance - debtr_balance);
-                edges[i][j] = error;
+                double err = fabs(fabs(credr_balance) - fabs(debtr_balance));
+                edges[i][j] = err;
             }
         }
     }
@@ -43,4 +42,15 @@ BipartiteMatching::BipartiteMatching(
     Solution* solution): solution(solution
 ) {
     graph = new BipFullGraph(solution);
+}
+
+double BipartiteMatching::Solve() {
+    HungarianAlgorithm ha;
+    vector<int> pairings;
+    double error = ha.Solve(graph->edges, pairings);
+    for (int i=0; i<(int)pairings.size(); i++) {
+        cout << "(" << solution->GetDebtors()[i] <<
+            ", " << solution->GetCreditors()[pairings[i]] << ")";
+    }
+    return error;
 }

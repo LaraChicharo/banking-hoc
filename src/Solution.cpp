@@ -1,4 +1,6 @@
 #include "Solution.hpp"
+
+#include <cstdio>
 using namespace std;
 
 
@@ -10,9 +12,9 @@ Solution::Solution(
     int npeople, vector<long long> all_balances
 ): npeople(npeople), all_balances(all_balances) {
     for (int i=0; i<npeople; i++) {
-        if (all_balances[i] <= 0)
+        if (all_balances[i] < 0)
             debtors.push_back(i);
-        else
+        else if (all_balances[i] > 0)
             creditors.push_back(i);
     }
 }

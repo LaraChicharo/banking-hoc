@@ -44,9 +44,7 @@ void Reader::OpenFile() {
     }
     
     string line;
-    npeople = 0;
     while (getline(filestream, line)) {
-        npeople++;
 
         for (int i=0; i<(int)line.size(); i++) {
             if (line[i] == ':' || line[i] == ',')
@@ -64,8 +62,6 @@ void Reader::OpenFile() {
             int money;
             linestream >> money;
 
-            cout << debtor << " owes " << money << " to " << creditor << endl;
-
             all_balances[debtor] -= money;
             all_balances[creditor] += money;
         }
@@ -77,5 +73,9 @@ vector<long long> Reader::GetAllBalances() {
 }
 
 int Reader::GetNPeople() {
+    for (int i=0; i<(int)all_balances.size(); i++) {
+        if (all_balances[i] != 0)
+            npeople++;
+    }
     return npeople;
 }
