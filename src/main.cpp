@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     vector<Transaction> transactions = solution->GetTransactions();
     printf("transactions: %d\n", (int)transactions.size());
-    for (Transaction t : transactions) {
+    /*for (Transaction t : transactions) {
         printf("(%d, %d, %lld)\n", t.debtor, t.creditor, t.amount);
-    }
+    }*/
 }
