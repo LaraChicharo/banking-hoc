@@ -23,13 +23,17 @@ class Solution {
         std::vector<int> debtors;
         std::vector<int> creditors;
 
+        void SelectTypes();
+
     public:
         Solution(int npeople, std::vector<long long> all_balances);
     
         std::vector<int> GetDebtors();
         std::vector<int> GetCreditors();
 
-        void MakeTransaction(int i, long long amount);
+        void Pay(int debtor, int creditor, long long amount);
         long long GetBalance(int id);
         int GetNPeople();
+        void RestartTypes();
+        std::vector<Transaction> GetTransactions();
 };

@@ -49,8 +49,10 @@ double BipartiteMatching::Solve() {
     vector<int> pairings;
     double error = ha.Solve(graph->edges, pairings);
     for (int i=0; i<(int)pairings.size(); i++) {
-        cout << "(" << solution->GetDebtors()[i] <<
-            ", " << solution->GetCreditors()[pairings[i]] << ")";
+        int debtor = solution->GetDebtors()[i];
+        int creditor = solution->GetCreditors()[pairings[i]];
+        long long amount = abs(solution->GetBalance(debtor));
+        solution->Pay(debtor, creditor, amount);
     }
     return error;
 }
