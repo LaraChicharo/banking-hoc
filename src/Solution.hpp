@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <cmath>
+#include <cstdlib>
 
 #include "Constraints.hpp"
 
@@ -12,19 +14,44 @@ struct Transaction {
     Transaction(int debtor, int creditor, int amount);
 };
 
+struct Move {
+    Transaction substract;
+    Transaction add;
+
+    Move(Transaction substact, Transaction add);
+};
+
 typedef struct Transaction Transaction;
+typedef struct Move Move;
 
 class Solution {
     private:
         int npeople;
-        double error;
+        int unit;
+        long long error;
+        long long nedges;
+
+        Move* back_move;
+
         std::vector<Transaction> transactions;
         std::vector<long long> all_balances;
 
         std::vector<int> debtors;
         std::vector<int> creditors;
 
+        std::vector<std::vector<int>> graph;
+        std::vector<int> debtors_nedges;
+        std::vector<long long> creditors_target;
+        std::vector<long long> creditors_current;
+
         void SelectTypes();
+        void CreateGraph();
+        void FillCreditorsInfo();
+        void FirstSolution();
+        void ApplyMove(Move move);
+        void CalculateError();
+        void BuildFirstSolution();
+        void CountEdges();
 
     public:
         Solution(int npeople, std::vector<long long> all_balances);
@@ -45,4 +72,9 @@ class Solution {
         std::vector<Transaction> GetTransactions();
         void SetError(double error);
         double GetError();
+
+        void MorphIntoNeighbour();
+        void MorphBack();
+
+        long long Fitness();
 };
