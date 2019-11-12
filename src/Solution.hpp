@@ -53,8 +53,16 @@ class Solution {
         void BuildFirstSolution();
         void CountEdges();
 
+        Move* GetBackMove();
+        std::vector<long long> GetAllBalances();
+        std::vector<std::vector<int>> GetGraph();
+        std::vector<int> GetDebtorsNEdges();
+        std::vector<long long> GetCreditorsTarget();
+        std::vector<long long> GetCreditorsCurrent();
+
     public:
         Solution(int npeople, std::vector<long long> all_balances);
+        Solution(Solution* solution);
     
         std::vector<int> GetDebtors();
         std::vector<int> GetCreditors();
@@ -71,10 +79,13 @@ class Solution {
         void RestartTypes();
         std::vector<Transaction> GetTransactions();
         void SetError(double error);
-        double GetError();
+        long long GetError();
 
         void MorphIntoNeighbour();
         void MorphBack();
 
         long long Fitness();
+        int GetUnit();
+        long long GetNEdges();
+
 };
