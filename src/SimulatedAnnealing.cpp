@@ -42,9 +42,9 @@ double SimulatedAnnealing::ComputeBatch(
 ) {
     int iteration_batch = 0;
     int c = 0;
-    double r = 0;
+    long long r = 0;
     double temp = temperature.GetTemperature();
-    while (c < L && iteration_batch++ < STOP) {
+    while (c < L*solution->GetNPeople() && iteration_batch++ < STOP) {
         long long fitness = solution->Fitness();
         solution->MorphIntoNeighbour();
         
@@ -60,6 +60,6 @@ double SimulatedAnnealing::ComputeBatch(
         } else
             solution->MorphBack();
     }
-    return r / c;
+    return (double)r / c;
 }
 

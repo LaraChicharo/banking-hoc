@@ -87,5 +87,6 @@ class Solution {
         long long Fitness();
         int GetUnit();
         long long GetNEdges();
+        void PrintGraph();
 
 };

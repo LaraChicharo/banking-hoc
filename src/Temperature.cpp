@@ -9,9 +9,10 @@ Temperature::Temperature(Solution* solution):
     virtual_zero(VIRTUAL_ZERO),
     decrease_rate(TEMPERATURE_DECAY)
 {
-    instance_size = solution->GetNPeople();
+    instance_size = solution->GetNPeople() * 2;
     Solution* tempsol = new Solution(solution);
-    temperature = InitialTemperature(tempsol, INITIAL_TEMPERATURE, P);
+    // temperature = InitialTemperature(tempsol, INITIAL_TEMPERATURE, P);
+    temperature = solution->GetNPeople() * 500;
     delete tempsol;
 }
 
@@ -33,7 +34,7 @@ double Temperature::InitialTemperature(
         T1 = initial_temp / 2;
         T2 = initial_temp;
     } else {
-        while (p > P) {
+        while (p > P && initial_temp > 0) {
             initial_temp /= 2;
             p = AcceptedPercentage(solution, initial_temp);
         }
@@ -70,8 +71,7 @@ double Temperature::AcceptedPercentage(Solution* solution, double temp) {
         else
             solution->MorphBack();
     }
-    double ans = ((double)c / instance_size);
-    return ans;
+    return ((double)c / instance_size);
 }
 
 double Temperature::GetTemperature() {

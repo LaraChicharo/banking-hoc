@@ -249,3 +249,18 @@ long long Solution::GetError() {
     return error;
 }
 
+void Solution::PrintGraph() {
+    printf("X :");
+    for (int j=0; j<(int)creditors.size(); j++)
+        printf(", %d", creditors[j]);
+    printf("\n");
+   
+    for (int i=0; i<(int)graph.size(); i++) {
+        printf("%d :", debtors[i]);
+        for (int j=0; j<(int)graph[i].size(); j++) {
+            printf(", %d", graph[i][j]);
+        }
+        printf("\n");
+    }
+}
+
