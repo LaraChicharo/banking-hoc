@@ -23,7 +23,6 @@ Solution::Solution(int npeople, vector<long long> all_balances):
 {
     SelectTypes();
     CreateGraph();
-    FillCreditorsInfo();
     FirstSolution();
 }
 
@@ -44,6 +43,23 @@ Solution::Solution(Solution* solution) {
 
 Move* Solution::GetBackMove() {
     return back_move;
+}
+
+void Solution::CalculateBounds() {
+    MAXNEDGES = creditors.size() * debtors.size(); 
+    MINNEDGES = debtors.size();
+    MAXERROR = 0;
+    long long mincred = 1e18;
+    for (int i=0; i<(int)creditors.size(); i++) {
+        mincred = min(mincred, creditors_target[i]); 
+        MAXERROR += creditors_target[i];
+    }
+    MAXERROR -= mincred;
+    long long debtsum = 0;
+    for (int i=0; i<(int)debtors.size(); i++) {
+        debtsum += abs(all_balances[debtors[i]]); 
+    }
+    MAXERROR += abs(mincred - debtsum);
 }
 
 long long Solution::GetNEdges() {
@@ -87,26 +103,16 @@ void Solution::CreateGraph() {
 
 void Solution::FirstSolution() {
     BuildFirstSolution();
+    FillCreditorsInfo();
+    CalculateBounds();
     CalculateError();
     CountEdges();
 }
 
 void Solution::BuildFirstSolution() {
     for (int i = 0; i<(int)debtors.size(); i++) {
-        int j = i;
-        int money = abs(all_balances[debtors[i]]);
-        j %= creditors.size();
-        while (money > 0) {
-            bool edge_before = graph[i][j] > 0;
-            graph[i][j] += unit;
-            creditors_current[j] += unit;
-            if (!edge_before)
-                debtors_nedges[i]++;
-            money -= unit;
-            j++;
-            j %= creditors.size();
-        }
-        all_balances[debtors[i]] = 0;
+        int j = i % creditors.size();
+        graph[i][j] += abs(all_balances[debtors[i]]);
     }
 }
 
@@ -118,6 +124,12 @@ void Solution::CalculateError() {
 }
 
 void Solution::CountEdges() {
+    for (int i=0; i<(int)graph.size(); i++) {
+        for (int j=0; j<(int)graph[i].size(); j++) {
+            if (graph[i][j] > 0) 
+                debtors_nedges[i]++;
+        } 
+    }
     nedges = 0; 
     for (int i=0; i<(int)debtors.size(); i++) {
         nedges += debtors_nedges[i]; 
@@ -170,16 +182,24 @@ void Solution::MorphBack() {
     ApplyMove(*back_move);
 }
 
-long long Solution::Fitness() {
-    return nedges + error * 2;
+double Solution::Fitness() {
+    double nedges_fitness = 
+        ((double)nedges - MINNEDGES)/(MAXNEDGES - MINNEDGES);
+    double error_fitness = (double)error / MAXERROR;
+    return error_fitness + nedges_fitness;
 }
 
 void Solution::FillCreditorsInfo() {
     creditors_target.resize(creditors.size());
     creditors_current.resize(creditors.size());
+    
+    for (int j=0; j < (int)graph[0].size(); j++) {
+        for (int i=0; i < (int)graph.size(); i++) {
+            creditors_current[j] += graph[i][j];  
+        } 
+    }
     for (int i = 0; i < (int)creditors.size(); i++) {
         creditors_target[i] = all_balances[creditors[i]];
-        creditors_current[i] = 0;
     }
 }
 

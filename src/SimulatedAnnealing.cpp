@@ -32,7 +32,7 @@ Solution* SimulatedAnnealing::TresholdAccepting() {
             p = ComputeBatch(solution, &best_solution);
         }
         temperature.Decrease();
-        // printf("solution accepted, fitness: %lld, error: %lld, nedges: %lld\n", solution->Fitness(), solution->GetError(), solution->GetNEdges());
+        printf("solution accepted, fitness: %f, error: %lld, nedges: %lld\n", solution->Fitness(), solution->GetError(), solution->GetNEdges());
     }
     return best_solution;
 }
@@ -53,12 +53,13 @@ double SimulatedAnnealing::ComputeBatch(
             *best_solution = new Solution(solution);
         }
             
-        if (solution->Fitness() <= fitness + temp) {  // Solution gets accepted
+        if (solution->Fitness() <= fitness + temp*solution->GetNPeople()) {  // Solution gets accepted
             c++;
             accepted_global++;
             r += solution->Fitness();
-        } else
+        } else {
             solution->MorphBack();
+        }
     }
     return (double)r / c;
 }

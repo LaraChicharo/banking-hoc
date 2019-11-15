@@ -11,6 +11,8 @@ const double P = .97;
 /// Initial temperature
 const double INITIAL_TEMPERATURE = 1100;
 /// Size of the batch
-const int L = 5000;
+const int L = 8000;
 /// Stop a batch after this many iterations it batch is still running
 const int STOP = L * 3000;
+///
+const double TEMPERATURE_MULTIPLIER = 0.5;

@@ -12,7 +12,7 @@ Temperature::Temperature(Solution* solution):
     instance_size = solution->GetNPeople() * 2;
     Solution* tempsol = new Solution(solution);
     // temperature = InitialTemperature(tempsol, INITIAL_TEMPERATURE, P);
-    temperature = solution->GetNPeople() * 500;
+    temperature = solution->GetNPeople() * TEMPERATURE_MULTIPLIER;
     delete tempsol;
 }
 

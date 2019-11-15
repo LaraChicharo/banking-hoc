@@ -30,6 +30,9 @@ class Solution {
         int unit;
         long long error;
         long long nedges;
+        long long MAXNEDGES;
+        long long MINNEDGES;
+        long long MAXERROR;
 
         Move* back_move;
 
@@ -52,6 +55,7 @@ class Solution {
         void CalculateError();
         void BuildFirstSolution();
         void CountEdges();
+        void CalculateBounds();
 
         Move* GetBackMove();
         std::vector<long long> GetAllBalances();
@@ -84,7 +88,7 @@ class Solution {
         void MorphIntoNeighbour();
         void MorphBack();
 
-        long long Fitness();
+        double Fitness();
         int GetUnit();
         long long GetNEdges();
         void PrintGraph();
