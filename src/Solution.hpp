@@ -56,6 +56,10 @@ class Solution {
         void BuildFirstSolution();
         void CountEdges();
         void CalculateBounds();
+        void FirstBackMove();
+        long long GetMaxNEdges();
+        long long GetMinNEdges();
+        long long GetMaxError();
 
         Move* GetBackMove();
         std::vector<long long> GetAllBalances();
@@ -92,5 +96,8 @@ class Solution {
         int GetUnit();
         long long GetNEdges();
         void PrintGraph();
+
+        double ErrorFitness();
+        double NEdgesFitness();
 
 };

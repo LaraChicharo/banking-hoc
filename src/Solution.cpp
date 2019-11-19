@@ -24,6 +24,7 @@ Solution::Solution(int npeople, vector<long long> all_balances):
     SelectTypes();
     CreateGraph();
     FirstSolution();
+    FirstBackMove();
 }
 
 Solution::Solution(Solution* solution) {
@@ -39,10 +40,19 @@ Solution::Solution(Solution* solution) {
     debtors           = solution->GetDebtors();
     creditors         = solution->GetCreditors();
     graph             = solution->GetGraph();
+    MAXNEDGES         = solution->GetMaxNEdges();
+    MINNEDGES         = solution->GetMinNEdges();
+    MAXERROR          = solution->GetMaxError();
 }
 
 Move* Solution::GetBackMove() {
     return back_move;
+}
+
+void Solution::FirstBackMove() {
+    Transaction a(0, 0, 0);
+    Transaction b(0, 0, 0);
+    back_move = new Move(a, b);
 }
 
 void Solution::CalculateBounds() {
@@ -60,6 +70,18 @@ void Solution::CalculateBounds() {
         debtsum += abs(all_balances[debtors[i]]); 
     }
     MAXERROR += abs(mincred - debtsum);
+}
+
+long long Solution::GetMaxNEdges() {
+    return MAXNEDGES;
+}
+
+long long Solution::GetMinNEdges() {
+    return MINNEDGES;
+}
+
+long long Solution::GetMaxError() {
+    return MAXERROR;
 }
 
 long long Solution::GetNEdges() {
@@ -95,7 +117,6 @@ void Solution::CreateGraph() {
     graph.resize(debtors.size());
     for (int i=0; i<(int)debtors.size(); i++) {
         graph[i].resize(creditors.size());
-        debtors_nedges[i] = 0;
         for (int j=0; j<(int)creditors.size(); j++)
             graph[i][j] = 0;
     } 
@@ -140,7 +161,12 @@ void Solution::MorphIntoNeighbour() {
     int debtor = rand() % (int)debtors.size();
     int creditor = rand() % (int)creditors.size();
     int creditor2 = rand() % (int)creditors.size();
-    long long amount = (rand() % (graph[debtor][creditor]/unit + 1)) * unit;
+    int all = rand() % 4;
+    long long amount;
+    if (all == 0)
+        amount = (rand() % (graph[debtor][creditor]/unit + 1)) * unit;
+    else
+        amount = graph[debtor][creditor]/unit;
    
     Transaction add(debtor, creditor, amount);
     Transaction substract(debtor, creditor2, amount);
@@ -183,11 +209,20 @@ void Solution::MorphBack() {
 }
 
 double Solution::Fitness() {
-    double nedges_fitness = 
-        ((double)nedges - MINNEDGES)/(MAXNEDGES - MINNEDGES);
-    double error_fitness = (double)error / MAXERROR;
-    return error_fitness + nedges_fitness;
+    double nedges_fitness = NEdgesFitness();    
+    double error_fitness = ErrorFitness();
+    return error_fitness * pow(npeople, 2) +
+        nedges_fitness * pow(npeople, 1.25);
 }
+
+double Solution::ErrorFitness() {
+    return (double)error / MAXERROR;
+}
+
+double Solution::NEdgesFitness() {
+    return ((double)nedges - MINNEDGES)/(MAXNEDGES - MINNEDGES);
+}
+
 
 void Solution::FillCreditorsInfo() {
     creditors_target.resize(creditors.size());

@@ -23,26 +23,33 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 Solution* SimulatedAnnealing::TresholdAccepting() {
     double p = 0;
     Solution* best_solution = new Solution(initial_solution);
-    Solution* solution = initial_solution;
+    Solution* best_zero_solution = new Solution(initial_solution);
+    Solution* solution = new Solution(initial_solution);
     printf("temperature: %f\n", temperature.GetTemperature());
     while (temperature.BiggerThanZero()) {
         double q = DBL_MAX;
         while (p < q) {
             q = p;
-            p = ComputeBatch(solution, &best_solution);
+            p = ComputeBatch(solution, &best_solution, &best_zero_solution);
         }
         temperature.Decrease();
-        printf("solution accepted, fitness: %f, error: %lld, nedges: %lld\n", solution->Fitness(), solution->GetError(), solution->GetNEdges());
     }
-    return best_solution;
+    if (best_zero_solution->GetError() > 0) {
+        delete best_zero_solution; 
+        return best_solution;
+    }
+    delete best_solution;
+    return best_zero_solution;
 }
 
 double SimulatedAnnealing::ComputeBatch(
-    Solution* solution, Solution** best_solution
+    Solution* solution,
+    Solution** best_solution,
+    Solution** best_zero_solution
 ) {
     int iteration_batch = 0;
     int c = 0;
-    long long r = 0;
+    double r = 0;
     double temp = temperature.GetTemperature();
     while (c < L*solution->GetNPeople() && iteration_batch++ < STOP) {
         long long fitness = solution->Fitness();
@@ -52,8 +59,16 @@ double SimulatedAnnealing::ComputeBatch(
             delete *best_solution;
             *best_solution = new Solution(solution);
         }
+        
+        if (solution->Fitness() < (*best_zero_solution)->Fitness() &&
+            solution->GetError() == 0
+        ) {
+            delete *best_zero_solution;
+            *best_zero_solution = new Solution(solution);
+        }
             
-        if (solution->Fitness() <= fitness + temp*solution->GetNPeople()) {  // Solution gets accepted
+        if (solution->Fitness() <= fitness + temp*solution->GetNPeople()) {
+            // Solution gets accepted
             c++;
             accepted_global++;
             r += solution->Fitness();
@@ -61,6 +76,6 @@ double SimulatedAnnealing::ComputeBatch(
             solution->MorphBack();
         }
     }
-    return (double)r / c;
+    return r / c;
 }
 

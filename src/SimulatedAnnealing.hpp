@@ -46,6 +46,7 @@ class SimulatedAnnealing {
         /// of the batch and the second is the last solution computed.
         double ComputeBatch(
             Solution* solution,
-            Solution** best_solution
+            Solution** best_solution,
+            Solution** best_zero_solution
         );
 };

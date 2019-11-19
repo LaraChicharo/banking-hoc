@@ -10,7 +10,8 @@ Reader::Reader(int argc, char* argv[]): argc(argc) {
     BuildInput(argc, argv);
     CheckInput();
     ParseInput();
-    OpenFile();
+    ReadSourceFile();
+    ReadSeedsFile();
 }
 
 
@@ -22,25 +23,27 @@ void Reader::BuildInput(int argc, char* argv[]) {
             stringi.push_back(argv[i][j]);
             j++;
         }
-        cout << stringi << endl;
         input_strings.push_back(stringi);
     }
 }
 
 void Reader::ParseInput() {
     sourcefile = input_strings[1];
+    seedsfile = input_strings[2];
 }
 
 void Reader::CheckInput() {
-   // Nothing as of now
-   return;
+    if (input_strings.size() < 3) {
+        printf("Not enough arguments\n");
+        exit(1);
+    }
 }
 
-void Reader::OpenFile() {
+void Reader::ReadSourceFile() {
     ifstream filestream(sourcefile);
     if (filestream.fail()) {
         // trows
-        printf("Cant open file\n");
+        printf("Cant open sourcefile\n");
         exit(1);
     }
     
@@ -69,6 +72,20 @@ void Reader::OpenFile() {
     }
 }
 
+void Reader::ReadSeedsFile() {
+    ifstream filestream(seedsfile);
+    if (filestream.fail()) {
+        printf("Cant open seedsfile\n");
+        exit(1);
+    }
+
+    int seed;
+    while (filestream >> seed) {
+        seeds.push_back(seed);
+    }
+
+}
+
 vector<long long> Reader::GetAllBalances() {
     return all_balances;
 }
@@ -79,4 +96,8 @@ int Reader::GetNPeople() {
             npeople++;
     }
     return npeople;
+}
+
+vector<int> Reader::GetSeeds() {
+    return seeds;
 }
