@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constraints.hpp"
-#include "Solution.hpp"
+#include "SimulatedAnnealingSolution.hpp"
 #include "Temperature.hpp"
 // #include "Journal.hpp"
 #include <cfloat>
@@ -13,7 +13,7 @@ class SimulatedAnnealing {
         /// temperature of the simulation
         Temperature temperature;
         /// first proposed solution
-        Solution* initial_solution;
+        SimulatedAnnealingSolution* initial_solution;
         /// number of accepted solutions over time, globally
         int accepted_global;
 
@@ -26,7 +26,7 @@ class SimulatedAnnealing {
         /// @param L size of a batch 
         SimulatedAnnealing(
             Temperature temperature,
-            Solution* initial_solution
+            SimulatedAnnealingSolution* initial_solution
             // Journal* journal,
         );
 
@@ -36,7 +36,7 @@ class SimulatedAnnealing {
         /// @brief Executes the full heuristic and gets the best solution
         /// it found
         /// @return The best solution found.
-        Solution* TresholdAccepting();
+        SimulatedAnnealingSolution* TresholdAccepting();
         /// @brief Computes a batch given a solution.
         /// @param solution the solution from which the batch will work upon
         /// @param best_solution the best solution the system has found.
@@ -45,8 +45,8 @@ class SimulatedAnnealing {
         /// @return A pair, the first number is the accepted ratio
         /// of the batch and the second is the last solution computed.
         double ComputeBatch(
-            Solution* solution,
-            Solution** best_solution,
-            Solution** best_zero_solution
+            SimulatedAnnealingSolution* solution,
+            SimulatedAnnealingSolution** best_solution,
+            SimulatedAnnealingSolution** best_zero_solution
         );
 };

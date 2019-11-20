@@ -5,19 +5,20 @@
 using namespace std;
 
 
-Temperature::Temperature(Solution* solution):
+Temperature::Temperature(SimulatedAnnealingSolution* solution):
     virtual_zero(VIRTUAL_ZERO),
     decrease_rate(TEMPERATURE_DECAY)
 {
     instance_size = solution->GetNPeople() * 2;
-    Solution* tempsol = new Solution(solution);
+    SimulatedAnnealingSolution* tempsol = 
+        new SimulatedAnnealingSolution(solution);
     // temperature = InitialTemperature(tempsol, INITIAL_TEMPERATURE, P);
     temperature = solution->GetNPeople() * TEMPERATURE_MULTIPLIER;
     delete tempsol;
 }
 
 double Temperature::InitialTemperature(
-    Solution* solution,
+    SimulatedAnnealingSolution* solution,
     double initial_temp,
     double P
 ) {
@@ -45,7 +46,7 @@ double Temperature::InitialTemperature(
 }
 
 double Temperature::BinarySearch(
-    Solution* solution, double T1, double T2, double P
+    SimulatedAnnealingSolution* solution, double T1, double T2, double P
 ) {
     double Tm = (T1 + T2)/2;
     if (T2 - T1 < virtual_zero)
@@ -60,7 +61,9 @@ double Temperature::BinarySearch(
         return BinarySearch(solution, Tm, T2, P);
 }
 
-double Temperature::AcceptedPercentage(Solution* solution, double temp) {
+double Temperature::AcceptedPercentage(
+    SimulatedAnnealingSolution* solution, double temp
+) {
     int c = 0;
     for (int i = 1; i <= instance_size; i++) {
         double fitness = solution->Fitness();

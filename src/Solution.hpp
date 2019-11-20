@@ -6,6 +6,7 @@
 
 #include "Constraints.hpp"
 
+
 struct Transaction {
     int debtor;
     int creditor;
@@ -30,74 +31,53 @@ class Solution {
         int unit;
         long long error;
         long long nedges;
-        long long MAXNEDGES;
-        long long MINNEDGES;
-        long long MAXERROR;
-
-        Move* back_move;
+        std::vector<long long> all_balances;
 
         std::vector<Transaction> transactions;
-        std::vector<long long> all_balances;
+        
+        std::vector<int> debtors_nedges;
+        std::vector<long long> creditors_target;
+        std::vector<long long> creditors_current;
 
         std::vector<int> debtors;
         std::vector<int> creditors;
 
         std::vector<std::vector<int>> graph;
-        std::vector<int> debtors_nedges;
-        std::vector<long long> creditors_target;
-        std::vector<long long> creditors_current;
-
+        
         void SelectTypes();
         void CreateGraph();
-        void FillCreditorsInfo();
         void FirstSolution();
-        void ApplyMove(Move move);
+        
+        void FillCreditorsInfo();
         void CalculateError();
         void BuildFirstSolution();
         void CountEdges();
-        void CalculateBounds();
-        void FirstBackMove();
-        long long GetMaxNEdges();
-        long long GetMinNEdges();
-        long long GetMaxError();
-
-        Move* GetBackMove();
-        std::vector<long long> GetAllBalances();
+        
         std::vector<std::vector<int>> GetGraph();
         std::vector<int> GetDebtorsNEdges();
-        std::vector<long long> GetCreditorsTarget();
         std::vector<long long> GetCreditorsCurrent();
 
     public:
         Solution(int npeople, std::vector<long long> all_balances);
         Solution(Solution* solution);
     
+        int GetUnit();
+        std::vector<long long> GetCreditorsTarget();
+        std::vector<long long> GetAllBalances();
         std::vector<int> GetDebtors();
         std::vector<int> GetCreditors();
-
-        int GetDebtorAt(int i);
-        int GetCreditorAt(int i);
-
+        
         int GetCreditorsSize();
         int GetDebtorsSize();
-
-        void Pay(int debtor, int creditor, long long amount);
-        long long GetBalance(int id);
+       
         int GetNPeople();
-        void RestartTypes();
-        std::vector<Transaction> GetTransactions();
-        void SetError(double error);
-        long long GetError();
-
-        void MorphIntoNeighbour();
-        void MorphBack();
-
-        double Fitness();
-        int GetUnit();
+        std::vector<Transaction> GetTransactions(); 
         long long GetNEdges();
+        long long GetError();
+        int GraphAt(int debtor, int creditor); 
+        
+        void ApplyMove(Move move);
+        
         void PrintGraph();
-
-        double ErrorFitness();
-        double NEdgesFitness();
 
 };

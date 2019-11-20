@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constraints.hpp"
-#include "Solution.hpp"
+#include "SimulatedAnnealingSolution.hpp"
 #include <cmath>
 
 
@@ -23,14 +23,22 @@ class Temperature {
         /// @param T1 lowest temperature on the range of search
         /// @param T2 highest temperature on the range of search
         /// @param P  Treshold of accepted percentage of solutions
-        double BinarySearch(Solution* solution, double T1, double T2, double P);
+        double BinarySearch(
+            SimulatedAnnealingSolution* solution,
+            double T1,
+            double T2,
+            double P
+        );
         /// @brief Given a numerical temperature and a solution, it calculates
         /// whats the percentage of accepted solutions under this conditions.
         /// @param solution the solution to work with
         /// @param temp the numerical temperature to test
-        double AcceptedPercentage(Solution* solution, double temp);
+        double AcceptedPercentage(
+            SimulatedAnnealingSolution* solution,
+            double temp
+        );
         double InitialTemperature(
-            Solution* solution,
+            SimulatedAnnealingSolution* solution,
             double initial_temp,
             double P
         );
@@ -38,7 +46,7 @@ class Temperature {
     public:
         /// @brief Constructor.
         /// @param solution initial solution
-        Temperature(Solution* solution);
+        Temperature(SimulatedAnnealingSolution* solution);
 
         /// @brief Returns the numerical temperature.
         double GetTemperature();

@@ -7,7 +7,7 @@ using namespace std;
 
 SimulatedAnnealing::SimulatedAnnealing(
     Temperature temperature,
-    Solution* initial_solution
+    SimulatedAnnealingSolution* initial_solution
 ):
     temperature(temperature),
     initial_solution(initial_solution),
@@ -20,11 +20,14 @@ SimulatedAnnealing::~SimulatedAnnealing() {
     delete initial_solution;
 }
 
-Solution* SimulatedAnnealing::TresholdAccepting() {
+SimulatedAnnealingSolution* SimulatedAnnealing::TresholdAccepting() {
     double p = 0;
-    Solution* best_solution = new Solution(initial_solution);
-    Solution* best_zero_solution = new Solution(initial_solution);
-    Solution* solution = new Solution(initial_solution);
+    SimulatedAnnealingSolution* best_solution = 
+        new SimulatedAnnealingSolution(initial_solution);
+    SimulatedAnnealingSolution* best_zero_solution = 
+        new SimulatedAnnealingSolution(initial_solution);
+    SimulatedAnnealingSolution* solution = 
+        new SimulatedAnnealingSolution(initial_solution);
     printf("temperature: %f\n", temperature.GetTemperature());
     while (temperature.BiggerThanZero()) {
         double q = DBL_MAX;
@@ -43,9 +46,9 @@ Solution* SimulatedAnnealing::TresholdAccepting() {
 }
 
 double SimulatedAnnealing::ComputeBatch(
-    Solution* solution,
-    Solution** best_solution,
-    Solution** best_zero_solution
+    SimulatedAnnealingSolution* solution,
+    SimulatedAnnealingSolution** best_solution,
+    SimulatedAnnealingSolution** best_zero_solution
 ) {
     int iteration_batch = 0;
     int c = 0;
@@ -57,18 +60,18 @@ double SimulatedAnnealing::ComputeBatch(
         
         if (solution->Fitness() < (*best_solution)->Fitness()) {
             delete *best_solution;
-            *best_solution = new Solution(solution);
+            *best_solution = new SimulatedAnnealingSolution(solution);
         }
         
         if (solution->Fitness() < (*best_zero_solution)->Fitness() &&
             solution->GetError() == 0
         ) {
             delete *best_zero_solution;
-            *best_zero_solution = new Solution(solution);
+            *best_zero_solution = new SimulatedAnnealingSolution(solution);
         }
             
         if (solution->Fitness() <= fitness + temp*solution->GetNPeople()) {
-            // Solution gets accepted
+            // SimulatedAnnealingSolution gets accepted
             c++;
             accepted_global++;
             r += solution->Fitness();

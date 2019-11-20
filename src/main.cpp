@@ -4,6 +4,7 @@
 
 #include "Temperature.hpp"
 #include "SimulatedAnnealing.hpp"
+#include "SimulatedAnnealingSolution.hpp"
 #include "Reader.hpp"
 #include "Solution.hpp"
 #include "HungarianSolver.hpp"
@@ -16,11 +17,11 @@ int main(int argc, char* argv[]) {
     vector<long long> all_balances = reader->GetAllBalances();
     vector<int> seeds = reader->GetSeeds();
     
+    Solution* solution = new Solution(npeople, all_balances);
     for (int seed : seeds) {
         srand(seed);
-        Solution* solution = new Solution(npeople, all_balances);
-        vector<int>creditors = solution->GetCreditors();
-        vector<int>debtors = solution->GetDebtors();
+        SimulatedAnnealingSolution* sasolution =
+            new SimulatedAnnealingSolution(solution);
         
         printf("debtors: %d\n", (int)solution->GetDebtors().size());
         /*for (int debtor : debtors)
@@ -31,12 +32,12 @@ int main(int argc, char* argv[]) {
         printf("\n");
         */
 
-        printf("First solution, fitness: %f, error: %lld, nedges %lld, ferror: %f, fnedges:%f\n", solution->Fitness(), solution->GetError(), solution->GetNEdges(), solution->ErrorFitness(), solution->NEdgesFitness());
-        Temperature temperature(solution);
+        printf("First solution, fitness: %f, error: %lld, nedges %lld, ferror: %f, fnedges:%f\n", sasolution->Fitness(), sasolution->GetError(), sasolution->GetNEdges(), sasolution->ErrorFitness(), sasolution->NEdgesFitness());
+        Temperature temperature(sasolution);
         SimulatedAnnealing* sa = new SimulatedAnnealing(
-            temperature, solution
+            temperature, sasolution
         );
-        Solution* best_sol = sa->TresholdAccepting();
+        SimulatedAnnealingSolution* best_sol = sa->TresholdAccepting();
         printf("nedges: %lld\n", best_sol->GetNEdges());
         printf("error: %lld\n", best_sol->GetError());
         printf("ferror: %f\n", best_sol->ErrorFitness());
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
         delete best_sol;
     }
     delete reader;
+    delete solution;
     // best_sol->PrintGraph();
     // vector<Transaction> transactions = solution->GetTransactions();
     // printf("transactions: %d\n", (int)transactions.size());
