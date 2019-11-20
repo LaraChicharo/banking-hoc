@@ -27,8 +27,8 @@ void BipFullGraph::SetEdges() {
             if (i >= debtors_size || j >= creditors_size) {
                 edges[i][j] = MAXERROR;
             } else {
-                double credr_balance = solution->GetBalance(creditors[j]); 
-                double debtr_balance = solution->GetBalance(debtors[i]); 
+                long long credr_balance = solution->GetBalance(creditors[j]); 
+                long long debtr_balance = solution->GetBalance(debtors[i]); 
                 double err = fabs(fabs(credr_balance) - fabs(debtr_balance));
                 edges[i][j] = err;
             }
@@ -60,10 +60,9 @@ double BipartiteMatching::Solve() {
             pairings[i] >= solution->GetCreditorsSize()
         )
             continue;
-        int debtor = solution->GetDebtorAt(i);
-        int creditor = solution->GetCreditorAt(pairings[i]);
-        long long amount = abs(solution->GetBalance(debtor));
-        solution->Pay(debtor, creditor, amount);
+        int debtori = i;
+        int creditori = pairings[i];
+        solution->Pay(debtori, creditori);
     }
     return error;
 }

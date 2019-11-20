@@ -28,7 +28,6 @@ SimulatedAnnealingSolution* SimulatedAnnealing::TresholdAccepting() {
         new SimulatedAnnealingSolution(initial_solution);
     SimulatedAnnealingSolution* solution = 
         new SimulatedAnnealingSolution(initial_solution);
-    printf("temperature: %f\n", temperature.GetTemperature());
     while (temperature.BiggerThanZero()) {
         double q = DBL_MAX;
         while (p < q) {

@@ -15,7 +15,6 @@ void HungarianSolver::Solve() {
     while (error > VIRTUAL_ZERO) {
         error = bm.Solve();
         bm.RebuildGraph();
-        // printf("error: %f\n", error);
         solution->SetError(error);
     }
 }

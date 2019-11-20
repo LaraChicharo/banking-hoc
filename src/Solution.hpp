@@ -74,7 +74,12 @@ class Solution {
         std::vector<Transaction> GetTransactions(); 
         long long GetNEdges();
         long long GetError();
-        int GraphAt(int debtor, int creditor); 
+        int GraphAt(int debtor, int creditor);
+        long long GetBalance(int id);
+        
+        void SetError(long long error);
+        void Pay(int debtori, int creditori);
+        void RestartTypes();
         
         void ApplyMove(Move move);
         

@@ -174,6 +174,30 @@ int Solution::GraphAt(int debtor, int creditor) {
     return graph[debtor][creditor];
 }
 
+long long Solution::GetBalance(int id) {
+    return all_balances[id];
+}
+
+void Solution::SetError(long long error) {
+    this->error = error;
+}
+
+void Solution::Pay(int debtori, int creditori) {
+    int debtor = debtors[debtori];
+    int creditor = creditors[creditori];
+    long long amount = abs(all_balances[debtor]);
+    Transaction transaction(debtor, creditor, amount);
+    transactions.push_back(transaction);
+    all_balances[debtor] += amount;
+    all_balances[creditor] -= amount;
+}
+
+void Solution::RestartTypes() {
+    debtors.clear();
+    creditors.clear();
+    SelectTypes();
+}
+
 void Solution::ApplyMove(Move move) {
     int debtor = move.substract.debtor;
     int creditor = move.substract.creditor;

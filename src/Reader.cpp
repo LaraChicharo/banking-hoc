@@ -29,11 +29,14 @@ void Reader::BuildInput(int argc, char* argv[]) {
 
 void Reader::ParseInput() {
     sourcefile = input_strings[1];
-    seedsfile = input_strings[2];
+    if (input_strings.size() > 2)
+        seedsfile = input_strings[2];
+    else
+        seedsfile = "";
 }
 
 void Reader::CheckInput() {
-    if (input_strings.size() < 3) {
+    if (input_strings.size() < 2) {
         printf("Not enough arguments\n");
         exit(1);
     }
@@ -74,16 +77,12 @@ void Reader::ReadSourceFile() {
 
 void Reader::ReadSeedsFile() {
     ifstream filestream(seedsfile);
-    if (filestream.fail()) {
-        printf("Cant open seedsfile\n");
-        exit(1);
+    if (!filestream.fail()) {
+        int seed;
+        while (filestream >> seed) {
+            seeds.push_back(seed);
+        }
     }
-
-    int seed;
-    while (filestream >> seed) {
-        seeds.push_back(seed);
-    }
-
 }
 
 vector<long long> Reader::GetAllBalances() {
