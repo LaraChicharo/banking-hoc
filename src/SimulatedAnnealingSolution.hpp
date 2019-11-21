@@ -15,6 +15,8 @@ class SimulatedAnnealingSolution {
         long long MAXNEDGES;
         long long MINNEDGES;
         long long MAXERROR;
+        long long ERRORMULTIPLIER;
+        long long EDGESMULTIPLIER;
 
         Move* back_move;
 
@@ -23,6 +25,9 @@ class SimulatedAnnealingSolution {
         long long GetMaxNEdges();
         long long GetMinNEdges();
         long long GetMaxError();
+
+        long long GetErrorMultiplier();
+        long long GetEdgesMultiplier();
 
         Move* GetBackMove();
     public:

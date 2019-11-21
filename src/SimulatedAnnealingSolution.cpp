@@ -22,10 +22,15 @@ SimulatedAnnealingSolution::SimulatedAnnealingSolution(
     MAXNEDGES = sasolution->GetMaxNEdges();
     MINNEDGES = sasolution->GetMinNEdges();
     MAXERROR  = sasolution->GetMaxError();
+    ERRORMULTIPLIER = sasolution->GetErrorMultiplier();
+    EDGESMULTIPLIER = sasolution->GetEdgesMultiplier();
     back_move = sasolution->GetBackMove();
 }
 
 void SimulatedAnnealingSolution::CalculateBounds() {
+    int npeople = solution->GetNPeople();
+    ERRORMULTIPLIER = pow(npeople, 2);
+    EDGESMULTIPLIER = pow(npeople, 1.25);
     int creditors_size = solution->GetCreditorsSize();
     int debtors_size = solution->GetDebtorsSize();
     MAXNEDGES = creditors_size * debtors_size; 
@@ -51,6 +56,14 @@ void SimulatedAnnealingSolution::FirstBackMove() {
     Transaction a(0, 0, 0);
     Transaction b(0, 0, 0);
     back_move = new Move(a, b);
+}
+
+long long SimulatedAnnealingSolution::GetErrorMultiplier() {
+    return ERRORMULTIPLIER;
+}
+
+long long SimulatedAnnealingSolution::GetEdgesMultiplier() {
+    return EDGESMULTIPLIER;
 }
 
 long long SimulatedAnnealingSolution::GetMaxNEdges() {
@@ -109,11 +122,10 @@ void SimulatedAnnealingSolution::MorphBack() {
 }
 
 double SimulatedAnnealingSolution::Fitness() {
-    int npeople = solution->GetNPeople();
     double nedges_fitness = NEdgesFitness();    
     double error_fitness = ErrorFitness();
-    return error_fitness * pow(npeople, 2) +
-        nedges_fitness * pow(npeople, 1.25);
+    return error_fitness * ERRORMULTIPLIER +
+        nedges_fitness * EDGESMULTIPLIER;
 }
 
 double SimulatedAnnealingSolution::ErrorFitness() {
