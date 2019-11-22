@@ -53,7 +53,6 @@ class Solution {
         void BuildFirstSolution();
         void CountEdges();
         
-        std::vector<std::vector<int>> GetGraph();
         std::vector<int> GetDebtorsNEdges();
         std::vector<long long> GetCreditorsCurrent();
 
@@ -62,6 +61,7 @@ class Solution {
         Solution(Solution* solution);
     
         int GetUnit();
+        std::vector<std::vector<int>> GetGraph();
         std::vector<long long> GetCreditorsTarget();
         std::vector<long long> GetAllBalances();
         std::vector<int> GetDebtors();
