@@ -14,5 +14,6 @@ const double INITIAL_TEMPERATURE = 1100;
 const int L = 2000;
 /// Stop a batch after this many iterations it batch is still running
 const int STOP = L * L;
-/// 
+/// The temperature will be obtained multiplying this
+/// for the number of people in the instance
 const double TEMPERATURE_MULTIPLIER = 0.25;
